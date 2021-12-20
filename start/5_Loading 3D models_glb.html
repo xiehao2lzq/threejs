@@ -51,10 +51,17 @@
             light.position.set(-1, 2, 4);
             scene.add(light);
         }
+        {
+            const color = 0xB1E1FF;
+            const intensity = 1;
+            const light = new THREE.DirectionalLight(color, intensity);
+            light.position.set(-1, -2, 4);
+            scene.add(light);
+        }
 
         const loader = new GLTFLoader();
 
-        loader.load( './model/Parrot.glb', function ( gltf ) {
+        loader.load( './model/test2.glb', function ( gltf ) {
 
             scene.add( gltf.scene );
             
