@@ -97,7 +97,21 @@
 
             {
                 const objLoader = new OBJLoader();
-                objLoader.load('https://threejs.org/manual/examples/resources/models/windmill/windmill.obj', (root) => {
+                objLoader.load('./model/007 - Squirtle/BR_Squirtle-Shiny01.obj', (root) => {
+                    root.traverse(child => {
+                        const color3 = new THREE.Color("rgb(255, 0, 0)");
+                        if (child.isMesh) {
+                            console.log(child.material)
+                            child.material.forEach(item=>{
+                                item.color = color3
+                            })
+                            //child.material.color.set(0x00FFFF); 
+                        // child.material.emissive = child.material.color
+                        // child.material.emissiveMap = child.material.map
+                        // modelGrop.add(child)
+
+                        }
+                    })
                     scene.add(root);
                 });
             }
