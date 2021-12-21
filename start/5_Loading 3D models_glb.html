@@ -60,18 +60,26 @@
         }
 
         const loader = new GLTFLoader();
-
-        loader.load( './model/test2.glb', function ( gltf ) {
-
-            scene.add( gltf.scene );
+        const solarSystem = new THREE.Object3D();
+        loader.load( './model/Parrot.glb', function ( gltf ) {
             
+            scene.add(solarSystem);
+            solarSystem.add(gltf.scene )
+            solarSystem.position.x = 0
+            solarSystem.position.y = 0
+            solarSystem.position.z = 0
+            //scene.add( gltf.scene );
 
         }, undefined, function ( error ) {
 
             console.error( error );
 
         } );
+        let i = 1
         const animate = function () {
+            solarSystem.rotation.y = Math.PI/32*i;
+            i++
+            console.log(solarSystem.rotation.y)
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
         };
