@@ -35,12 +35,13 @@
         //第二个参数是长宽比（aspect ratio）。 也就是你用一个物体的宽除以它的高的值。比如说，当你在一个宽屏电视上播放老电影时，可以看到图像仿佛是被压扁的。
 
         //接下来的两个参数是近截面（near）和远截面（far）。 当物体某些部分比摄像机的远截面远或者比近截面近的时候，该这些部分将不会被渲染到场景中。或许现在你不用担心这个值的影响，但未来为了获得更好的渲染性能，你将可以在你的应用程序里去设置它。
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
-        camera.position.z = 5;
+        camera.position.z = 500;
+        camera.position.y = 500;
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.target.set(0, 2, 0);
         controls.update();
@@ -61,7 +62,7 @@
 
         const loader = new GLTFLoader();
         const solarSystem = new THREE.Object3D();
-        loader.load( './model/Parrot.glb', function ( gltf ) {
+        loader.load( './model/scene.gltf', function ( gltf ) {
             
             scene.add(solarSystem);
             solarSystem.add(gltf.scene )
@@ -77,9 +78,9 @@
         } );
         let i = 1
         const animate = function () {
-            solarSystem.rotation.y = Math.PI/32*i;
-            i++
-            console.log(solarSystem.rotation.y)
+            // solarSystem.rotation.y = Math.PI/32*i;
+            // i++
+            // console.log(solarSystem.rotation.y)
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
         };
