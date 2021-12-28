@@ -1,0 +1,106 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Three.js - Scenegraph - Sun</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #c {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="c"></canvas>
+</body>
+<script type="module">
+  import * as THREE from 'https://cdn.skypack.dev/three@0.135.0';
+
+  function main() {
+    const canvas = document.querySelector('#c');
+    const renderer = new THREE.WebGLRenderer({canvas});
+    /* PerspectiveCamera通过四个属性来定义一个视锥.
+    near定义了视锥的前端, far定义了后端, fov是视野, 
+    通过计算正确的高度来从摄像机的位置获得指定的以near为单位的视野, 
+    定义的是视锥的前端和后端的高度. aspect间接地定义了视锥前端和后端的宽度,
+    实际上视锥的宽度是通过高度乘以aspect来得到的. */
+    const fov = 40;
+    const aspect = 2;  // the canvas default
+    const near = 0.1;
+    const far = 10000;
+    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    camera.position.set(0, 50, 0);
+    camera.up.set(0, 0, 1);
+    camera.lookAt(0, 0, 0);
+    // 创建场景
+    const scene = new THREE.Scene();
+    // 设置光照
+    {
+      const color = 0xFFFFFF;
+      const intensity = 3;
+      const light = new THREE.PointLight(color, intensity);
+      scene.add(light);
+    }
+
+    // an array of objects who's rotation to update
+    const objects = [];
+
+    const radius = 1;
+    const widthSegments = 10;
+    const heightSegments = 10;
+    const sphereGeometry = new THREE.SphereGeometry(
+        radius, widthSegments, heightSegments);
+    // 材质
+    const sunMaterial = new THREE.MeshPhongMaterial({emissive: 0xFFFF00});
+    const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial);
+    sunMesh.scale.set(5, 5, 5);
+    scene.add(sunMesh);
+    objects.push(sunMesh);
+    // 自适应
+    function resizeRendererToDisplaySize(renderer) {
+      const canvas = renderer.domElement;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      const needResize = canvas.width !== width || canvas.height !== height;
+      if (needResize) {
+        renderer.setSize(width, height, false);
+      }
+      return needResize;
+    }
+    // 渲染
+    function render(time) {
+      time *= 0.001;
+
+      if (resizeRendererToDisplaySize(renderer)) {
+        const canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+      }
+
+      objects.forEach((obj) => {
+        obj.rotation.y = time;
+      });
+
+      renderer.render(scene, camera);
+
+      requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  main();
+</script>
+
+</html>
