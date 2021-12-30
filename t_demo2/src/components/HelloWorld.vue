@@ -90,7 +90,7 @@ export default {
       {
         const mtlLoader = new MTLLoader();
         mtlLoader.setPath("");
-        mtlLoader.load("../../static/model/大场景.mtl", (mtl) => {
+        mtlLoader.load("../../static/model/untitled6.mtl", (mtl) => {
           mtl.preload();
           const objLoader = new OBJLoader();
           //   for(let key  in mtl.materials){
@@ -100,9 +100,17 @@ export default {
           console.log(mtl);
           objLoader.setMaterials(mtl);
           objLoader.setPath("");
-          objLoader.load("../../static/model/大场景.obj", (root) => {
+          objLoader.load("../../static/model/untitled6.obj", (root) => {
             scene.add(root);
-            console.log(root);
+            console.log(root)
+            scene.traverse((child) => {
+              if (child.isMesh) {
+                //console.log(child.id)
+                if(child.name =='配电室.002'){
+                  console.log(child)
+                }
+              }
+            });
             root.position.set(-10, 0, 0);
           });
         });
@@ -115,7 +123,7 @@ export default {
       // 自适应界面填充屏幕
       window.addEventListener("resize", this.onWindowResize);
       // 监听点击事件
-      window.addEventListener( 'dblclick', this.mousePosition ,false);
+      window.addEventListener("dblclick", this.mousePosition, false);
       // 实例化射线
       raycaster = new THREE.Raycaster();
     },
@@ -123,21 +131,20 @@ export default {
     bindModelClick() {
       raycaster.setFromCamera(pointer, camera);
       const intersects = raycaster.intersectObjects(scene.children);
-      console.log(intersects,pointer)
+      console.log(intersects, pointer);
       if (intersects.length > 0) {
-        if(INTERSECTED != intersects[0].object){
-           INTERSECTED = intersects[0].object
-           INTERSECTED.material.emissive.setHex( 0xff0000 );
+        if (INTERSECTED != intersects[0].object) {
+          INTERSECTED = intersects[0].object;
+          //INTERSECTED.material.emissive.setHex(0xff0000);
         }
       }
     },
-    mousePosition( event ) {
-				//alert(123)
-				pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-        this.bindModelClick()
-
-			},
+    mousePosition(event) {
+      //alert(123)
+      pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.bindModelClick();
+    },
     // 帧渲染
     animate() {
       requestAnimationFrame(this.animate);
