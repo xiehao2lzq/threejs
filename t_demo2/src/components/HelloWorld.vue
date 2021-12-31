@@ -5,14 +5,18 @@
 <script>
 import * as THREE from "../../static/build/three.module";
 import { OrbitControls } from "../../static/rely/jsm/controls/OrbitControls";
+import { GLTFLoader } from "../../static/rely/jsm/loaders/GLTFLoader";
 import { OBJLoader } from "../../static/rely/jsm/loaders/OBJLoader";
 import { MTLLoader } from "../../static/rely/jsm/loaders/MTLLoader";
-let camera, controls, scene, renderer, raycaster;
+let camera, controls, scene, renderer, raycaster,main,Lightcircle;
 let INTERSECTED;
 const pointer = new THREE.Vector2();
 export default {
   data() {
-    return {};
+    return {
+      targetEvl:0,
+      nowEvl:-2
+    };
   },
   mounted() {
     this.init();
@@ -39,7 +43,7 @@ export default {
           0.1,
           30000
         );
-        camera.position.set(-50, 100, 0);
+        camera.position.set(-50, 10, 20);
       }
 
       // 实例化交互控制插件 并配置参数
@@ -69,7 +73,7 @@ export default {
       // 创建地面
       {
         // 纹理
-        const texture = new THREE.TextureLoader().load(
+        const texture = new THREE.TextureLoader().load( 
           require("../../static/image/ground.jpg")
         );
         texture.wrapS = THREE.RepeatWrapping;
@@ -88,32 +92,53 @@ export default {
         scene.add(ground);
       }
       {
-        const mtlLoader = new MTLLoader();
-        mtlLoader.setPath("");
-        mtlLoader.load("../../static/model/untitled6.mtl", (mtl) => {
-          mtl.preload();
-          const objLoader = new OBJLoader();
-          //   for(let key  in mtl.materials){
-          //     mtl.materials[key].side = THREE.DoubleSide
-          //   }
-          //mtl.materials.Material.side = THREE.DoubleSide;
-          console.log(mtl);
-          objLoader.setMaterials(mtl);
-          objLoader.setPath("");
-          objLoader.load("../../static/model/untitled6.obj", (root) => {
-            scene.add(root);
-            console.log(root)
-            scene.traverse((child) => {
-              if (child.isMesh) {
-                //console.log(child.id)
-                if(child.name =='配电室.002'){
-                  console.log(child)
-                }
-              }
-            });
-            root.position.set(-10, 0, 0);
-          });
-        });
+        // const mtlLoader = new MTLLoader();
+        // mtlLoader.setPath("");
+        // mtlLoader.load("../../static/model/untitled6.mtl", (mtl) => {
+        //   mtl.preload();
+        //   const objLoader = new OBJLoader();
+        //   //   for(let key  in mtl.materials){
+        //   //     mtl.materials[key].side = THREE.DoubleSide
+        //   //   }
+        //   //mtl.materials.Material.side = THREE.DoubleSide;
+        //   console.log(mtl);
+        //   objLoader.setMaterials(mtl);
+        //   objLoader.setPath("");
+        //   objLoader.load("../../static/model/untitled6.obj", (root) => {
+        //     main = root
+        //     scene.add(main);
+        //     console.log(main)
+        //     scene.traverse((child) => {
+        //       if (child.isMesh) {
+        //         //console.log(child.id)
+        //         if(child.name =='配电室.002'){
+        //           console.log(child)
+        //         }
+        //       }
+        //     });
+        //     main.position.set(-10, -2, 0);
+        //     this.openAnimation()
+        //     this.createCircle()
+        //   });
+        // });
+        const loader = new GLTFLoader();
+        loader.load( '../../static/model/组.glb', function ( gltf ) {
+            
+            // scene.add(solarSystem);
+            // solarSystem.add(gltf.scene )
+            // solarSystem.position.x = 0
+            // solarSystem.position.y = 0
+            // solarSystem.position.z = 0
+            main = gltf.scene
+            main.position.set(-10, 0, 0);
+            //this.openAnimation()
+            //this.createCircle()
+            scene.add( main );
+            console.log(gltf.scene)
+
+        }, undefined, function ( error ) {
+            console.error( error );
+        } );
       }
       {
         // 初步只添加环境光 后续在研究其它
@@ -131,7 +156,7 @@ export default {
     bindModelClick() {
       raycaster.setFromCamera(pointer, camera);
       const intersects = raycaster.intersectObjects(scene.children);
-      console.log(intersects, pointer);
+      console.log(intersects[0]);
       if (intersects.length > 0) {
         if (INTERSECTED != intersects[0].object) {
           INTERSECTED = intersects[0].object;
@@ -155,9 +180,32 @@ export default {
     onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-
       renderer.setSize(window.innerWidth, window.innerHeight);
     },
+    //开启模型加载之后的动画
+    openAnimation(){
+      this.riseAnimation()
+    },
+    // 抬升动画
+    riseAnimation(){
+      var timer = requestAnimationFrame(this.riseAnimation)
+      this.nowEvl += 0.02
+      if(this.nowEvl>=this.targetEvl) this.nowEvl = this.targetEvl,cancelAnimationFrame(timer)
+      main.position.set(-10, this.nowEvl, 0);
+    },
+    // 圆环闪烁
+
+    // 创建几何体
+    createCircle(){
+      const geometry = new THREE.CircleGeometry( 5, 32 );
+      const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+      Lightcircle = new THREE.Mesh( geometry, material );
+      
+      scene.add( Lightcircle );
+      Lightcircle.position.set(0, 0.01, -2);
+      Lightcircle.rotation.x = -Math.PI / 2;
+      console.log(Lightcircle.scale)
+    }
   },
 };
 </script>
