@@ -41,7 +41,7 @@
             const renderer = new THREE.WebGLRenderer({
                 canvas
             });
-
+            renderer.shadowMap.enabled = true;
             const fov = 45;
             const aspect = 2; // the canvas default
             const near = 0.1;
@@ -90,9 +90,10 @@
                 const intensity = 1;
                 const light = new THREE.DirectionalLight(color, intensity);
                 light.position.set(0, 10, 0);
-                light.target.position.set(-5, 0, 0);
+                //light.target.position.set(-5, 0, 0);
+                light.castShadow = true;
                 scene.add(light);
-                scene.add(light.target);
+                //scene.add(light.target);
             }
 
             {
@@ -106,7 +107,9 @@
                             child.material.forEach(item=>{
                                 item.color = color3
                                 item.transparent = true
-                                item.opacity = 0.5
+                                //item.opacity = 0.5
+                                item.receiveShadow = true;
+							    item.castShadow = true;
                             })
                             //child.material.color.set(0x00FFFF); 
                         // child.material.emissive = child.material.color
