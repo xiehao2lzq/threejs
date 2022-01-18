@@ -64,6 +64,16 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.ico$/,
+        use: [{
+          loader: 'url-loader', // or file-loader
+          options: {
+            limit: 1,
+            name: 'img/[name].[ext]'
+          }
+        }]
       }
     ]
   },
