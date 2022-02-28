@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .element {
+            padding: 15px 30px;
+            box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
+            border: 1px solid rgba(127, 255, 255, 0.25);
+            font-family: Helvetica, sans-serif;
+            text-align: center;
+            line-height: normal;
+            background-color:rgba(0,127,127,0.5);
+            position:absolute
+        }
+
+        .element .bigTitle {
+            color: #fff;
+            font-weight: 900;
+            font-size: 45px;
+        }
+
+        .element:hover {
+            box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.75);
+            border: 1px solid rgba(127, 255, 255, 0.75);
+        }
+
+        .panelInfo{
+            box-sizing: border-box;
+            padding: 20px;
+            width: 240px;
+            display: flex;
+            flex-wrap: wrap;
+            text-align: left;
+            background-image: url("./t_demo2/static/image/panel.png");
+            background-size: 100% 100%;
+        }
+        .panelInfo .littleTitle{
+            width: 100%;
+            color: #fff;
+            font-weight: 900;
+        }
+        .panelInfo .textInfo{
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .panelInfo .sigleInfo{
+            width: 50%;
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .panelInfo .name{
+            color: rgb(197, 194, 194);
+            font-size: 10px;
+            margin-top: 10px;
+        }
+        .panelInfo .value{
+            color: rgb(10, 186, 240);
+            font-weight: 900;
+            font-size: 14px;
+        }
+        .panelInfo img{
+            width: 30px;
+        }
+    </style>
+    <div class="panelInfo">
+        <div class="littleTitle">
+            西1#硝化回流泵
+        </div>
+        <div class="textInfo">
+            <div class="sigleInfo">
+                <div class="value">22.15</div>
+                <div class="name">当前频率</div>
+            </div>
+            <div class="sigleInfo">
+                <img src="./t_demo2/static/image/风扇.png" alt="">
+            </div>
+            <div class="sigleInfo">
+                <div class="value">自动</div>
+                <div class="name">故障状态</div>
+            </div>
+            <div class="sigleInfo">
+                <div class="value">远程</div>
+                <div class="name">就地远程</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

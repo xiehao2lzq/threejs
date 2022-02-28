@@ -181,7 +181,7 @@ class GLTFLoader extends Loader {
 		};
 
 		const loader = new FileLoader( this.manager );
-
+		debugger
 		loader.setPath( this.path );
 		loader.setResponseType( 'arraybuffer' );
 		loader.setRequestHeader( this.requestHeader );
